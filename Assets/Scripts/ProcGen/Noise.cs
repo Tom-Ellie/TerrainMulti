@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public static class Noise {
 
-    public enum NormalizeMode { Local, Global }; //Estimate local of global normalization
+    public enum NormalizeMode { Local, Global };
 
     public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode) {
         float[,] noiseMap = new float[mapWidth, mapHeight];
@@ -13,7 +12,6 @@ public static class Noise {
         Vector2[] octaveOffsets = new Vector2[octaves];
 
         float maxPossibleHeight = 0;
-
         float amplitude = 1;
         float frequency = 1;
 
@@ -67,9 +65,9 @@ public static class Noise {
         for (int y = 0; y < mapHeight; y++) {
             for (int x = 0; x < mapWidth; x++) {
                 if (normalizeMode == NormalizeMode.Local) {
-                    noiseMap[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]); //Best for non-endless terrain
+                    noiseMap[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
                 } else {
-                    float normalizedHeight = (noiseMap[x, y] + 1) / (2f * maxPossibleHeight / 2f);
+                    float normalizedHeight = (noiseMap[x, y] + 1) / (maxPossibleHeight / 0.9f);
                     noiseMap[x, y] = Mathf.Clamp(normalizedHeight, 0, int.MaxValue);
                 }
             }
