@@ -2,23 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/* Makes the relevant calls to generate terrain */
 public class TerrainGenerator : MonoBehaviour {
 
-	const float viewerMoveThresholdForChunkUpdate = 25f;
-	const float sqrViewerMoveThresholdForChunkUpdate = viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
+	const float viewerMoveThresholdForChunkUpdate = 25f; //How much viewer must move to update active chunks
+	const float sqrViewerMoveThresholdForChunkUpdate = viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate; //Square for easier calcs
 
 
-	public int colliderLODIndex;
-	public LODInfo[] detailLevels;
+	public int colliderLODIndex; //LOD for collider mesh
+	public LODInfo[] detailLevels; //Array containing LOD distances and quality
 
-	public MeshSettings meshSettings;
-	public HeightMapSettings heightMapSettings;
-	public TextureData textureSettings;
+	public MeshSettings meshSettings; //Reference to used MeshSettings
+	public HeightMapSettings heightMapSettings; //Reference to height map settings
+	public TextureData textureSettings; //reference to texture data
 
-	public Transform viewer;
-	public Material mapMaterial;
+	public Transform viewer; //Specified viewer (usually user)
+	public Material mapMaterial; //Material being used
 
-	Vector2 viewerPosition;
+	Vector2 viewerPosition; //These two used for movement checks
 	Vector2 viewerPositionOld;
 
 	float meshWorldSize;

@@ -19,7 +19,7 @@ public static class MeshGenerator {
 
 		for (int y = 0; y < numVertsPerLine; y ++) {
 			for (int x = 0; x < numVertsPerLine; x ++) {
-				bool isOutOfMeshVertex = y == 0 || y == numVertsPerLine - 1 || x == 0 || x == numVertsPerLine - 1;
+				bool isOutOfMeshVertex = (y == 0 || y == numVertsPerLine - 1 || x == 0 || x == numVertsPerLine - 1);
 				bool isSkippedVertex = x > 2 && x < numVertsPerLine - 3 && y > 2 && y < numVertsPerLine - 3 && ((x - 2) % skipIncrement != 0 || (y - 2) % skipIncrement != 0);
 				if (isOutOfMeshVertex) {
 					vertexIndicesMap [x, y] = outOfMeshVertexIndex;
