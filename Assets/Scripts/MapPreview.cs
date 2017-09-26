@@ -11,11 +11,13 @@ public class MapPreview : MonoBehaviour {
 	public enum DrawMode {NoiseMap, Mesh, FalloffMap};
 	public DrawMode drawMode;
 
-	public MeshSettings meshSettings;
-	public HeightMapSettings heightMapSettings;
-	public TextureData textureData;
 
-	public Material terrainMaterial;
+    public RegionHolder region;
+//  public MeshSettings meshSettings;
+//	public HeightMapSettings heightMapSettings;
+//	public TextureData textureData;
+
+//	public Material terrainMaterial;
 
 
 
@@ -27,16 +29,16 @@ public class MapPreview : MonoBehaviour {
 
 
 	public void DrawMapInEditor() {
-		textureData.ApplyToMaterial (terrainMaterial);
-		textureData.UpdateMeshHeights (terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
-		HeightMap heightMap = HeightMapGenerator.GenerateHeightMap (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
+		region.textureData.ApplyToMaterial (region.terrainMaterial);
+		region.textureData.UpdateMeshHeights (region.terrainMaterial, region.heightMapSettings.minHeight, region.heightMapSettings.maxHeight);
+		HeightMap heightMap = HeightMapGenerator.GenerateHeightMap (region.meshSettings.numVertsPerLine, region.meshSettings.numVertsPerLine, region.heightMapSettings, Vector2.zero);
 
 		if (drawMode == DrawMode.NoiseMap) {
 			DrawTexture (TextureGenerator.TextureFromHeightMap (heightMap));
 		} else if (drawMode == DrawMode.Mesh) {
-			DrawMesh (MeshGenerator.GenerateTerrainMesh (heightMap.values,meshSettings, editorPreviewLOD));
+			DrawMesh (MeshGenerator.GenerateTerrainMesh (heightMap.values, region.meshSettings, editorPreviewLOD));
 		} else if (drawMode == DrawMode.FalloffMap) {
-			DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(meshSettings.numVertsPerLine),0,1)));
+			DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(region.meshSettings.numVertsPerLine),0,1)));
 		}
 	}
 
@@ -68,24 +70,34 @@ public class MapPreview : MonoBehaviour {
 	}
 
 	void OnTextureValuesUpdated() {
-		textureData.ApplyToMaterial (terrainMaterial);
+        region.textureData.ApplyToMaterial (region.terrainMaterial);
 	}
 
+    //OnValuesUpdated is a base function which
 	void OnValidate() {
+        
+		if (region.meshSettings != null) {
+            region.meshSettings.OnValuesUpdated -= OnValuesUpdated; //Remove last changes
+            region.meshSettings.OnValuesUpdated += OnValuesUpdated;
+		} else {
+            Debug.LogError("No Mesh Settings specified in previewer");
+            return;
+        }
+        if (region.heightMapSettings != null) {
+            region.heightMapSettings.OnValuesUpdated -= OnValuesUpdated;
+            region.heightMapSettings.OnValuesUpdated += OnValuesUpdated;
+        } else {
+            Debug.LogError("No Height Map Settings specified in previewer");
+            return;
+        }
+        if (region.textureData != null) {
+            region.textureData.OnValuesUpdated -= OnTextureValuesUpdated;
+            region.textureData.OnValuesUpdated += OnTextureValuesUpdated;
+		} else {
+            Debug.LogError("No Texture Data specified in previewer");
+            return;
+        }
 
-		if (meshSettings != null) {
-			meshSettings.OnValuesUpdated -= OnValuesUpdated;
-			meshSettings.OnValuesUpdated += OnValuesUpdated;
-		}
-		if (heightMapSettings != null) {
-			heightMapSettings.OnValuesUpdated -= OnValuesUpdated;
-			heightMapSettings.OnValuesUpdated += OnValuesUpdated;
-		}
-		if (textureData != null) {
-			textureData.OnValuesUpdated -= OnTextureValuesUpdated;
-			textureData.OnValuesUpdated += OnTextureValuesUpdated;
-		}
-
-	}
+    }
 
 }

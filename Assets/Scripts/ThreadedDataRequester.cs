@@ -24,7 +24,7 @@ public class ThreadedDataRequester : MonoBehaviour {
 	void DataThread(Func<object> generateData, Action<object> callback) {
 		object data = generateData ();
 		lock (dataQueue) {
-			dataQueue.Enqueue (new ThreadInfo (callback, data));
+			dataQueue.Enqueue (new ThreadInfo (callback, data)); //Once the thread is finished generating, put on queue
 		}
 	}
 		
@@ -32,8 +32,8 @@ public class ThreadedDataRequester : MonoBehaviour {
 	void Update() {
 		if (dataQueue.Count > 0) {
 			for (int i = 0; i < dataQueue.Count; i++) {
-				ThreadInfo threadInfo = dataQueue.Dequeue ();
-				threadInfo.callback (threadInfo.parameter);
+				ThreadInfo threadInfo = dataQueue.Dequeue (); //Remove threads that have finished from queue
+				threadInfo.callback (threadInfo.parameter); //Return to the calling function
 			}
 		}
 	}

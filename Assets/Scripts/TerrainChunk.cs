@@ -65,11 +65,12 @@ public class TerrainChunk {
 	}
 
 	public void Load() {
+        //Pass function to generate height map, along with a callback, to multi-threading
 		ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
 	}
 
 
-
+    //Called once load is sucessful for this chunk
 	void OnHeightMapReceived(object heightMapObject) {
 		this.heightMap = (HeightMap)heightMapObject;
 		heightMapReceived = true;
@@ -83,9 +84,9 @@ public class TerrainChunk {
 		}
 	}
 
-
+    
 	public void UpdateTerrainChunk() {
-		if (heightMapReceived) {
+		if (heightMapReceived) { //If loaded and recieved a height map...
 			float viewerDstFromNearestEdge = Mathf.Sqrt (bounds.SqrDistance (viewerPosition));
 
 			bool wasVisible = IsVisible ();

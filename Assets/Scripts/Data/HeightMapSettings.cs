@@ -26,7 +26,7 @@ public class HeightMapSettings : UpdatableData {
 	#if UNITY_EDITOR
 
 	protected override void OnValidate() {
-		noiseSettings.ValidateValues ();
+		noiseSettings.ValidateValues (); //Noise settings in Noise.cs, just auto-sets values stated to allowed values
 		base.OnValidate ();
 	}
 	#endif

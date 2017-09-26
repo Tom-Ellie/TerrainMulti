@@ -9,14 +9,14 @@ public class UpdatableData : ScriptableObject {
 	#if UNITY_EDITOR
 
 	protected virtual void OnValidate() {
-		if (autoUpdate) {
-			UnityEditor.EditorApplication.update += NotifyOfUpdatedValues;
-		}
+		if (autoUpdate) { //If autoupdate is on, add allow updates when the editor updates itself
+            UnityEditor.EditorApplication.update += NotifyOfUpdatedValues; //Need to go through update, as can't perform actual action in an OnValidate
+        }
 	}
 
-	public void NotifyOfUpdatedValues() {
+	public void NotifyOfUpdatedValues() { //Called either with auto-update (above OnValidate), or when the 'Update' button is pressed (UpdatableDataEditor)
 		UnityEditor.EditorApplication.update -= NotifyOfUpdatedValues;
-		if (OnValuesUpdated != null) {
+		if (OnValuesUpdated != null) { //If list isn't empty, perform the action
 			OnValuesUpdated ();
 		}
 	}
