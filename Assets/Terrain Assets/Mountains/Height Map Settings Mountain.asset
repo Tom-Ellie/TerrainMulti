@@ -16,12 +16,12 @@ MonoBehaviour:
     normalizeMode: 1
     scale: 270.69
     octaves: 6
-    persistance: 0.498
+    persistance: 0.494
     lacunarity: 2
-    seed: 0
+    seed: 1
     offset: {x: 0, y: 0}
   useFalloff: 0
-  heightMultiplier: 487.2
+  heightMultiplier: 489.76
   heightCurve:
     serializedVersion: 2
     m_Curve:
