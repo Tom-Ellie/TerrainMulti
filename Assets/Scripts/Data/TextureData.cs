@@ -23,7 +23,7 @@ public class TextureData : UpdatableData {
 		material.SetFloatArray ("baseTextureScales", layers.Select(x => x.textureScale).ToArray());
 		Texture2DArray texturesArray = GenerateTextureArray (layers.Select (x => x.texture).ToArray ());
 		material.SetTexture ("baseTextures", texturesArray);
-        Debug.Log(savedMinHeight);
+  //      Debug.Log(savedMinHeight);
 
 		UpdateMeshHeights (material, savedMinHeight, savedMaxHeight);
 	}

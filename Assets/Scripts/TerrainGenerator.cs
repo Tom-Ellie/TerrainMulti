@@ -63,15 +63,15 @@ public class TerrainGenerator : MonoBehaviour {
 			
 		int currentChunkCoordX = Mathf.RoundToInt (viewerPosition.x / meshWorldSize);
 		int currentChunkCoordY = Mathf.RoundToInt (viewerPosition.y / meshWorldSize);
-
+        Debug.Log(currentChunkCoordX);
 		for (int yOffset = -chunksVisibleInViewDst; yOffset <= chunksVisibleInViewDst; yOffset++) { //For all chunks in view
 			for (int xOffset = -chunksVisibleInViewDst; xOffset <= chunksVisibleInViewDst; xOffset++) {
 				Vector2 viewedChunkCoord = new Vector2 (currentChunkCoordX + xOffset, currentChunkCoordY + yOffset); //Define centre of chunk in current iter
-				if (!alreadyUpdatedChunkCoords.Contains (viewedChunkCoord)) { //If not currently created
+                if (!alreadyUpdatedChunkCoords.Contains (viewedChunkCoord)) { //If not currently created
 					if (terrainChunkDictionary.ContainsKey (viewedChunkCoord)) { //
 						terrainChunkDictionary [viewedChunkCoord].UpdateTerrainChunk ();
 					} else {
-						TerrainChunk newChunk = new TerrainChunk (viewedChunkCoord,heightMapSettings,meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial);
+						TerrainChunk newChunk = new TerrainChunk (viewedChunkCoord, heightMapSettings, meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, false);
 						terrainChunkDictionary.Add (viewedChunkCoord, newChunk);
 						newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanged;
 						newChunk.Load ();

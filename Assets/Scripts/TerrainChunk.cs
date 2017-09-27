@@ -28,7 +28,7 @@ public class TerrainChunk {
 	MeshSettings meshSettings;
 	Transform viewer;
 
-	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material) {
+	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material, bool isVis) {
 		this.coord = coord;
 		this.detailLevels = detailLevels;
 		this.colliderLODIndex = colliderLODIndex;
@@ -49,7 +49,7 @@ public class TerrainChunk {
 
 		meshObject.transform.position = new Vector3(position.x,0,position.y);
 		meshObject.transform.parent = parent;
-		SetVisible(false);
+		SetVisible(isVis);
 
 		lodMeshes = new LODMesh[detailLevels.Length];
 		for (int i = 0; i < detailLevels.Length; i++) {
@@ -66,13 +66,21 @@ public class TerrainChunk {
 
 	public void Load() {
         //Pass function to generate height map, along with a callback, to multi-threading
-		ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
-	}
+#if UNITY_EDITOR
+        OnHeightMapReceived(HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre));
+#endif
+
+#if !UNITY_EDITOR
+        ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
+#endif
+    }
 
 
     //Called once load is sucessful for this chunk
 	void OnHeightMapReceived(object heightMapObject) {
-		this.heightMap = (HeightMap)heightMapObject;
+
+        Debug.Log("WOW");
+        this.heightMap = (HeightMap)heightMapObject;
 		heightMapReceived = true;
 
 		UpdateTerrainChunk ();
@@ -176,7 +184,13 @@ class LODMesh {
 
 	public void RequestMesh(HeightMap heightMap, MeshSettings meshSettings) {
 		hasRequestedMesh = true;
-		ThreadedDataRequester.RequestData (() => MeshGenerator.GenerateTerrainMesh (heightMap.values, meshSettings, lod), OnMeshDataReceived);
-	}
+#if UNITY_EDITOR
+        OnMeshDataReceived(MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, lod));
+#endif
+
+#if !UNITY_EDITOR
+        ThreadedDataRequester.RequestData (() => MeshGenerator.GenerateTerrainMesh (heightMap.values, meshSettings, lod), OnMeshDataReceived);
+#endif
+    }
 
 }

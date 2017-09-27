@@ -8,7 +8,7 @@ public static class MeshGenerator {
 
 		int skipIncrement = (levelOfDetail == 0)?1:levelOfDetail * 2;
 		int numVertsPerLine = meshSettings.numVertsPerLine;
-
+        //meshWorldSize is (numVertsPerLine - 3) * meshScale
 		Vector2 topLeft = new Vector2 (-1, 1) * meshSettings.meshWorldSize / 2f;
 
 		MeshData meshData = new MeshData (numVertsPerLine, skipIncrement, meshSettings.useFlatShading);

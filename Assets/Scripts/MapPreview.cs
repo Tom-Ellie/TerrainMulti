@@ -11,27 +11,20 @@ public class MapPreview : MonoBehaviour {
 	public enum DrawMode {NoiseMap, Mesh, FalloffMap};
 	public DrawMode drawMode;
 
-
     public RegionHolder region;
-//  public MeshSettings meshSettings;
-//	public HeightMapSettings heightMapSettings;
-//	public TextureData textureData;
-
-//	public Material terrainMaterial;
-
-
 
 	[Range(0,MeshSettings.numSupportedLODs-1)]
 	public int editorPreviewLOD;
+
 	public bool autoUpdate;
 
-
+    public float widthOfRegion;
 
 
 	public void DrawMapInEditor() {
 		region.textureData.ApplyToMaterial (region.terrainMaterial);
 		region.textureData.UpdateMeshHeights (region.terrainMaterial, region.heightMapSettings.minHeight, region.heightMapSettings.maxHeight);
-		HeightMap heightMap = HeightMapGenerator.GenerateHeightMap (region.meshSettings.numVertsPerLine, region.meshSettings.numVertsPerLine, region.heightMapSettings, Vector2.zero);
+		HeightMap heightMap = HeightMapGenerator.GenerateHeightMap ((int)(region.meshSettings.numVertsPerLine * widthOfRegion), (int)(region.meshSettings.numVertsPerLine * widthOfRegion), region.heightMapSettings, Vector2.zero);
 
 		if (drawMode == DrawMode.NoiseMap) {
 			DrawTexture (TextureGenerator.TextureFromHeightMap (heightMap));

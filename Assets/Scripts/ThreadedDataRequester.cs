@@ -17,8 +17,7 @@ public class ThreadedDataRequester : MonoBehaviour {
 		ThreadStart threadStart = delegate {
 			instance.DataThread (generateData, callback);
 		};
-
-		new Thread (threadStart).Start ();
+        new Thread (threadStart).Start ();
 	}
 
 	void DataThread(Func<object> generateData, Action<object> callback) {
