@@ -8,8 +8,11 @@ public class MapPreview : MonoBehaviour {
 	public MeshRenderer meshRenderer;
 
 
-	public enum DrawMode {NoiseMap, Mesh, FalloffMap};
+	public enum DrawMode {NoiseMap, Mesh, FalloffMap, Coast};
+    public enum NoiseType { Perlin, FirstLevelWarp };
+
 	public DrawMode drawMode;
+    public NoiseType noiseType;
 
     public RegionHolder region;
 
@@ -18,21 +21,36 @@ public class MapPreview : MonoBehaviour {
 
 	public bool autoUpdate;
 
-    public float widthOfRegion;
-
+    public static int wow = 0;
 
 	public void DrawMapInEditor() {
-		region.textureData.ApplyToMaterial (region.terrainMaterial);
-		region.textureData.UpdateMeshHeights (region.terrainMaterial, region.heightMapSettings.minHeight, region.heightMapSettings.maxHeight);
-		HeightMap heightMap = HeightMapGenerator.GenerateHeightMap ((int)(region.meshSettings.numVertsPerLine * widthOfRegion), (int)(region.meshSettings.numVertsPerLine * widthOfRegion), region.heightMapSettings, Vector2.zero);
+        region.textureData.ApplyToMaterial (region.terrainMaterial);
+        region.textureData.UpdateMeshHeights (region.terrainMaterial, region.heightMapSettings.minHeight, region.heightMapSettings.maxHeight);
+        HeightMap heightMap;
+        if (noiseType == NoiseType.Perlin) {
+            heightMap = HeightMapGenerator.GenerateHeightMap((int)(region.meshSettings.numVertsPerLine), (int)(region.meshSettings.numVertsPerLine), region.heightMapSettings, Vector2.zero);
+        } else if (noiseType == NoiseType.FirstLevelWarp) {
+            heightMap = HeightMapGenerator.GenerateHeightMapDomWarp((int)(region.meshSettings.numVertsPerLine), (int)(region.meshSettings.numVertsPerLine), region.heightMapSettings, Vector2.zero);
+        } else {
+            heightMap = HeightMapGenerator.GenerateHeightMap((int)(region.meshSettings.numVertsPerLine), (int)(region.meshSettings.numVertsPerLine), region.heightMapSettings, Vector2.zero);
+        }
 
-		if (drawMode == DrawMode.NoiseMap) {
-			DrawTexture (TextureGenerator.TextureFromHeightMap (heightMap));
+        if (drawMode == DrawMode.NoiseMap) {
+                DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
 		} else if (drawMode == DrawMode.Mesh) {
 			DrawMesh (MeshGenerator.GenerateTerrainMesh (heightMap.values, region.meshSettings, editorPreviewLOD));
 		} else if (drawMode == DrawMode.FalloffMap) {
 			DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(region.meshSettings.numVertsPerLine),0,1)));
-		}
+		} else if (drawMode == DrawMode.Coast) {
+//            Agent agent = new Agent();
+//            agent.seedPos = new IntVec((region.meshSettings.numVertsPerLine) / 2, (region.meshSettings.numVertsPerLine) / 2);
+//            agent.preferredDir = Direction.North;
+//            agent.tokens = 1000;
+//            CoastMaker.InitLandmass(region.meshSettings.numVertsPerLine);
+//            CoastMaker.CoastLineGenerate(agent);
+ //           HeightMap hm = new HeightMap(CoastMaker.landmass, 0, 1);
+//            DrawTexture(TextureGenerator.TextureFromHeightMap(hm));
+        }
 	}
 
 

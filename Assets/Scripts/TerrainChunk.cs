@@ -67,11 +67,11 @@ public class TerrainChunk {
 	public void Load() {
         //Pass function to generate height map, along with a callback, to multi-threading
 #if UNITY_EDITOR
-        OnHeightMapReceived(HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre));
+        OnHeightMapReceived(HeightMapGenerator.GenerateHeightMapDomWarp(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre));
 #endif
 
 #if !UNITY_EDITOR
-        ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
+        ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMapDomWarp (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
 #endif
     }
 
