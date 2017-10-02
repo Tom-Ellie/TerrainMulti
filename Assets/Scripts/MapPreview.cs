@@ -9,10 +9,7 @@ public class MapPreview : MonoBehaviour {
 
 
 	public enum DrawMode {NoiseMap, Mesh, FalloffMap, Coast};
-    public enum NoiseType { Perlin, FirstLevelWarp };
-
 	public DrawMode drawMode;
-    public NoiseType noiseType;
 
     public RegionHolder region;
 
@@ -27,13 +24,8 @@ public class MapPreview : MonoBehaviour {
         region.textureData.ApplyToMaterial (region.terrainMaterial);
         region.textureData.UpdateMeshHeights (region.terrainMaterial, region.heightMapSettings.minHeight, region.heightMapSettings.maxHeight);
         HeightMap heightMap;
-        if (noiseType == NoiseType.Perlin) {
-            heightMap = HeightMapGenerator.GenerateHeightMap((int)(region.meshSettings.numVertsPerLine), (int)(region.meshSettings.numVertsPerLine), region.heightMapSettings, Vector2.zero);
-        } else if (noiseType == NoiseType.FirstLevelWarp) {
-            heightMap = HeightMapGenerator.GenerateHeightMapDomWarp((int)(region.meshSettings.numVertsPerLine), (int)(region.meshSettings.numVertsPerLine), region.heightMapSettings, Vector2.zero);
-        } else {
-            heightMap = HeightMapGenerator.GenerateHeightMap((int)(region.meshSettings.numVertsPerLine), (int)(region.meshSettings.numVertsPerLine), region.heightMapSettings, Vector2.zero);
-        }
+
+        heightMap = HeightMapGenerator.GenerateHeightMap((int)(region.meshSettings.numVertsPerLine), (int)(region.meshSettings.numVertsPerLine), region.heightMapSettings, Vector2.zero);
 
         if (drawMode == DrawMode.NoiseMap) {
                 DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
@@ -111,4 +103,6 @@ public class MapPreview : MonoBehaviour {
 
     }
 
+
 }
+

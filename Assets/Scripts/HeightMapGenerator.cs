@@ -35,7 +35,7 @@ public static class HeightMapGenerator {
     }
 
     public static HeightMap GenerateHeightMapDomWarp(int width, int height, HeightMapSettings settings, Vector2 sampleCentre) {
-        float[,] values = Noise.GenerateNoiseMapDomWarp(width, height, settings.noiseSettings, sampleCentre);
+        float[,] values = Noise.GenerateNoiseMap(width, height, settings.noiseSettings, sampleCentre);
         AnimationCurve heightCurve_threadsafe = new AnimationCurve(settings.heightCurve.keys);
 
         float minValue = float.MaxValue;

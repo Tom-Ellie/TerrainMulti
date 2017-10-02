@@ -63,7 +63,6 @@ public class TerrainGenerator : MonoBehaviour {
 			
 		int currentChunkCoordX = Mathf.RoundToInt (viewerPosition.x / meshWorldSize);
 		int currentChunkCoordY = Mathf.RoundToInt (viewerPosition.y / meshWorldSize);
-        Debug.Log(currentChunkCoordX);
 		for (int yOffset = -chunksVisibleInViewDst; yOffset <= chunksVisibleInViewDst; yOffset++) { //For all chunks in view
 			for (int xOffset = -chunksVisibleInViewDst; xOffset <= chunksVisibleInViewDst; xOffset++) {
 				Vector2 viewedChunkCoord = new Vector2 (currentChunkCoordX + xOffset, currentChunkCoordY + yOffset); //Define centre of chunk in current iter

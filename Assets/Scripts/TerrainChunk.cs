@@ -64,22 +64,19 @@ public class TerrainChunk {
 
 	}
 
-	public void Load() {
+    public void Load() {
         //Pass function to generate height map, along with a callback, to multi-threading
-#if UNITY_EDITOR
-        OnHeightMapReceived(HeightMapGenerator.GenerateHeightMapDomWarp(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre));
-#endif
-
-#if !UNITY_EDITOR
-        ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMapDomWarp (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
-#endif
+        if (Application.isEditor && !Application.isPlaying) {
+            OnHeightMapReceived(HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre));
+        } else {
+            ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
+        }
     }
 
 
     //Called once load is sucessful for this chunk
 	void OnHeightMapReceived(object heightMapObject) {
 
-        Debug.Log("WOW");
         this.heightMap = (HeightMap)heightMapObject;
 		heightMapReceived = true;
 
@@ -184,13 +181,11 @@ class LODMesh {
 
 	public void RequestMesh(HeightMap heightMap, MeshSettings meshSettings) {
 		hasRequestedMesh = true;
-#if UNITY_EDITOR
-        OnMeshDataReceived(MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, lod));
-#endif
-
-#if !UNITY_EDITOR
-        ThreadedDataRequester.RequestData (() => MeshGenerator.GenerateTerrainMesh (heightMap.values, meshSettings, lod), OnMeshDataReceived);
-#endif
+        if (Application.isEditor && !Application.isPlaying) {
+            OnMeshDataReceived(MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, lod));
+        } else {
+            ThreadedDataRequester.RequestData(() => MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, lod), OnMeshDataReceived);
+        }
     }
 
 }
