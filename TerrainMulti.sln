@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrainMulti.CSharp", "TerrainMulti.CSharp.csproj", "{B83E918D-B893-8747-60FF-C755C71F65AF}"
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrainMulti", "TerrainMulti.csproj", "{0BA43466-90F1-FCEF-2628-D89ECFD767F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrainMulti.CSharp.Plugins", "TerrainMulti.CSharp.Plugins.csproj", "{66A15A28-F1BD-01F4-FA14-3C25C9319BBA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrainMulti.Plugins", "TerrainMulti.Plugins.csproj", "{C4BC19D9-3319-502F-083C-41173F7BDA23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrainMulti.CSharp.Editor", "TerrainMulti.CSharp.Editor.csproj", "{939DF953-C6E9-A95C-9932-6F841D0C534C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrainMulti.Editor", "TerrainMulti.Editor.csproj", "{5FFD5662-DAB9-1399-1FC2-15A47A6C90DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,18 +13,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B83E918D-B893-8747-60FF-C755C71F65AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B83E918D-B893-8747-60FF-C755C71F65AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B83E918D-B893-8747-60FF-C755C71F65AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B83E918D-B893-8747-60FF-C755C71F65AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66A15A28-F1BD-01F4-FA14-3C25C9319BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66A15A28-F1BD-01F4-FA14-3C25C9319BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66A15A28-F1BD-01F4-FA14-3C25C9319BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66A15A28-F1BD-01F4-FA14-3C25C9319BBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{939DF953-C6E9-A95C-9932-6F841D0C534C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{939DF953-C6E9-A95C-9932-6F841D0C534C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{939DF953-C6E9-A95C-9932-6F841D0C534C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{939DF953-C6E9-A95C-9932-6F841D0C534C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA43466-90F1-FCEF-2628-D89ECFD767F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA43466-90F1-FCEF-2628-D89ECFD767F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA43466-90F1-FCEF-2628-D89ECFD767F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA43466-90F1-FCEF-2628-D89ECFD767F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4BC19D9-3319-502F-083C-41173F7BDA23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4BC19D9-3319-502F-083C-41173F7BDA23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4BC19D9-3319-502F-083C-41173F7BDA23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4BC19D9-3319-502F-083C-41173F7BDA23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FFD5662-DAB9-1399-1FC2-15A47A6C90DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FFD5662-DAB9-1399-1FC2-15A47A6C90DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FFD5662-DAB9-1399-1FC2-15A47A6C90DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FFD5662-DAB9-1399-1FC2-15A47A6C90DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

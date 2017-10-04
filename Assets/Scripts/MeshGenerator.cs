@@ -9,7 +9,7 @@ public static class MeshGenerator {
 		int skipIncrement = (levelOfDetail == 0)?1:levelOfDetail * 2;
 		int numVertsPerLine = meshSettings.numVertsPerLine;
         //meshWorldSize is (numVertsPerLine - 3) * meshScale
-		Vector2 topLeft = new Vector2 (-1, 1) * meshSettings.meshWorldSize / 2f;
+		Vector2 topLeft = new Vector2 (-1, 1) * meshSettings.meshWorldSize / 2f; //Used for centering the mesh
 
 		MeshData meshData = new MeshData (numVertsPerLine, skipIncrement, meshSettings.useFlatShading);
 
@@ -19,8 +19,9 @@ public static class MeshGenerator {
 
 		for (int y = 0; y < numVertsPerLine; y ++) {
 			for (int x = 0; x < numVertsPerLine; x ++) {
-				bool isOutOfMeshVertex = (y == 0 || y == numVertsPerLine - 1 || x == 0 || x == numVertsPerLine - 1);
-				bool isSkippedVertex = x > 2 && x < numVertsPerLine - 3 && y > 2 && y < numVertsPerLine - 3 && ((x - 2) % skipIncrement != 0 || (y - 2) % skipIncrement != 0);
+				bool isOutOfMeshVertex = (y == 0 || y == numVertsPerLine - 1 || x == 0 || x == numVertsPerLine - 1); //If is on border (to be made LOD 0)
+                //If not on border and not divisible by skipIncrement (thus not a vertex to use)
+				bool isSkippedVertex = x > 2 && x < numVertsPerLine - 3 && y > 2 && y < numVertsPerLine - 3 && ((x - 2) % skipIncrement != 0 || (y - 2) % skipIncrement != 0); //If is not to be considered as part of LOD
 				if (isOutOfMeshVertex) {
 					vertexIndicesMap [x, y] = outOfMeshVertexIndex;
 					outOfMeshVertexIndex--;
@@ -42,6 +43,7 @@ public static class MeshGenerator {
 					bool isEdgeConnectionVertex = (y == 2 || y == numVertsPerLine - 3 || x == 2 || x == numVertsPerLine - 3) && !isOutOfMeshVertex && !isMeshEdgeVertex && !isMainVertex;
 
 					int vertexIndex = vertexIndicesMap [x, y];
+                    //Percent through the vertices (value 0 to 1), excluding the out of mesh vertices
 					Vector2 percent = new Vector2 (x - 1, y - 1) / (numVertsPerLine - 3);
 					Vector2 vertexPosition2D = topLeft + new Vector2(percent.x,-percent.y) * meshSettings.meshWorldSize;
 					float height = heightMap [x, y];

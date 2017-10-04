@@ -22,7 +22,7 @@ public class TerrainGenerator : MonoBehaviour {
 	Vector2 viewerPosition; //These two used for movement checks
 	Vector2 viewerPositionOld;
 
-	float meshWorldSize;
+	float meshTileSize;
 	int chunksVisibleInViewDst;
 
 	Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
@@ -33,8 +33,8 @@ public class TerrainGenerator : MonoBehaviour {
 		textureSettings.UpdateMeshHeights (mapMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight); //Gets min and max heights using height multiplier * height curve at min and max
 
 		float maxViewDst = detailLevels [detailLevels.Length - 1].visibleDstThreshold;
-		meshWorldSize = meshSettings.meshWorldSize;
-		chunksVisibleInViewDst = Mathf.RoundToInt(maxViewDst / meshWorldSize);
+		meshTileSize = meshSettings.meshWorldSize;
+		chunksVisibleInViewDst = Mathf.RoundToInt(maxViewDst / meshTileSize);
 
 		UpdateVisibleChunks ();
 	}
@@ -56,23 +56,23 @@ public class TerrainGenerator : MonoBehaviour {
 		
 	void UpdateVisibleChunks() {
 		HashSet<Vector2> alreadyUpdatedChunkCoords = new HashSet<Vector2> ();
-		for (int i = visibleTerrainChunks.Count-1; i >= 0; i--) {
-			alreadyUpdatedChunkCoords.Add (visibleTerrainChunks [i].coord);
-			visibleTerrainChunks [i].UpdateTerrainChunk ();
+		for (int i = visibleTerrainChunks.Count-1; i >= 0; i--) { //Go through list of known visible chunks
+			alreadyUpdatedChunkCoords.Add (visibleTerrainChunks [i].coord); //Add to temp list of already 'updated' chunks, as part of visibleTerrainChunks
+			visibleTerrainChunks [i].UpdateTerrainChunk (); //Actually update them
 		}
 			
-		int currentChunkCoordX = Mathf.RoundToInt (viewerPosition.x / meshWorldSize);
-		int currentChunkCoordY = Mathf.RoundToInt (viewerPosition.y / meshWorldSize);
+		int currentChunkCoordX = Mathf.RoundToInt (viewerPosition.x / meshTileSize); //Which chunk you're currently in
+		int currentChunkCoordY = Mathf.RoundToInt (viewerPosition.y / meshTileSize);
 		for (int yOffset = -chunksVisibleInViewDst; yOffset <= chunksVisibleInViewDst; yOffset++) { //For all chunks in view
 			for (int xOffset = -chunksVisibleInViewDst; xOffset <= chunksVisibleInViewDst; xOffset++) {
-				Vector2 viewedChunkCoord = new Vector2 (currentChunkCoordX + xOffset, currentChunkCoordY + yOffset); //Define centre of chunk in current iter
-                if (!alreadyUpdatedChunkCoords.Contains (viewedChunkCoord)) { //If not currently created
-					if (terrainChunkDictionary.ContainsKey (viewedChunkCoord)) { //
-						terrainChunkDictionary [viewedChunkCoord].UpdateTerrainChunk ();
+				Vector2 viewedChunkCoord = new Vector2 (currentChunkCoordX + xOffset, currentChunkCoordY + yOffset); //Chunk position, where each chunk increments by 1 in each direction
+                if (!alreadyUpdatedChunkCoords.Contains (viewedChunkCoord)) { //If not updated already in first for loop...
+					if (terrainChunkDictionary.ContainsKey (viewedChunkCoord)) { //If chunk has been created previously, but not in visible array...
+						terrainChunkDictionary [viewedChunkCoord].UpdateTerrainChunk (); //Simply update it
 					} else {
 						TerrainChunk newChunk = new TerrainChunk (viewedChunkCoord, heightMapSettings, meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, false);
-						terrainChunkDictionary.Add (viewedChunkCoord, newChunk);
-						newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanged;
+						terrainChunkDictionary.Add (viewedChunkCoord, newChunk); //Add to set of chunks that've been made
+						newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanged; //Add the OnTerrainChunk... func to the newChunk's onVisibilityChanged call. Now when chunk calls onVis..., it will execute OnTerrain...
 						newChunk.Load ();
 					}
 				}

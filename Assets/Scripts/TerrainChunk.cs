@@ -28,6 +28,7 @@ public class TerrainChunk {
 	MeshSettings meshSettings;
 	Transform viewer;
 
+    //Parent is the TerrainGenerator
 	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material, bool isVis) {
 		this.coord = coord;
 		this.detailLevels = detailLevels;
@@ -36,9 +37,10 @@ public class TerrainChunk {
 		this.meshSettings = meshSettings;
 		this.viewer = viewer;
 
-		sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale;
-		Vector2 position = coord * meshSettings.meshWorldSize ;
-		bounds = new Bounds(position,Vector2.one * meshSettings.meshWorldSize );
+        //sampleCentre is the centre of this chunk without scaling
+		sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale; //Effectively same as coord * (numVertsPerLine - 3)
+        Vector2 position = coord * meshSettings.meshWorldSize; //position is coord ((0,1) etc) * tileSize. so if tile is 400, scale is 2, and coord is (1,2), pos is (800, 1600)
+		bounds = new Bounds(position,Vector2.one * meshSettings.meshWorldSize ); //Bounds contains centre of position, and size of worldSize (if as above, 800)
 
 
 		meshObject = new GameObject("Terrain Chunk");
@@ -47,16 +49,16 @@ public class TerrainChunk {
 		meshCollider = meshObject.AddComponent<MeshCollider>();
 		meshRenderer.material = material;
 
-		meshObject.transform.position = new Vector3(position.x,0,position.y);
-		meshObject.transform.parent = parent;
-		SetVisible(isVis);
+		meshObject.transform.position = new Vector3(position.x,0,position.y); //Set actual position to real position
+		meshObject.transform.parent = parent; //Set parent
+		SetVisible(isVis); //Make visible
 
-		lodMeshes = new LODMesh[detailLevels.Length];
+		lodMeshes = new LODMesh[detailLevels.Length]; //Array of LOD meshes.
 		for (int i = 0; i < detailLevels.Length; i++) {
-			lodMeshes[i] = new LODMesh(detailLevels[i].lod);
-			lodMeshes[i].updateCallback += UpdateTerrainChunk;
+			lodMeshes[i] = new LODMesh(detailLevels[i].lod); //Create new lod mesh with lod lod
+			lodMeshes[i].updateCallback += UpdateTerrainChunk; //Within the lodMesh, when updateCallback called, execute UpdateTerrain
 			if (i == colliderLODIndex) {
-				lodMeshes[i].updateCallback += UpdateCollisionMesh;
+				lodMeshes[i].updateCallback += UpdateCollisionMesh; //One of the LODs also have collisionmesh added to callback
 			}
 		}
 
@@ -64,6 +66,7 @@ public class TerrainChunk {
 
 	}
 
+    //Get height map then update terrain
     public void Load() {
         //Pass function to generate height map, along with a callback, to multi-threading
         if (Application.isEditor && !Application.isPlaying) {
@@ -89,38 +92,40 @@ public class TerrainChunk {
 		}
 	}
 
-    
+    //Called upon recieving height meshes, and when lod updates
 	public void UpdateTerrainChunk() {
 		if (heightMapReceived) { //If loaded and recieved a height map...
 			float viewerDstFromNearestEdge = Mathf.Sqrt (bounds.SqrDistance (viewerPosition));
 
 			bool wasVisible = IsVisible ();
-			bool visible = viewerDstFromNearestEdge <= maxViewDst;
+			bool visible = (viewerDstFromNearestEdge <= maxViewDst);
 
 			if (visible) {
 				int lodIndex = 0;
 
 				for (int i = 0; i < detailLevels.Length - 1; i++) {
+                    //If further than currently considered lod, 
 					if (viewerDstFromNearestEdge > detailLevels [i].visibleDstThreshold) {
-						lodIndex = i + 1;
+						lodIndex = i + 1; //Keeps 1 ahead of loop, so when exits contains actual lod
 					} else {
 						break;
 					}
 				}
 
-				if (lodIndex != previousLODIndex) {
-					LODMesh lodMesh = lodMeshes [lodIndex];
-					if (lodMesh.hasMesh) {
-						previousLODIndex = lodIndex;
+				if (lodIndex != previousLODIndex) { //If need a different lod
+					LODMesh lodMesh = lodMeshes [lodIndex]; //Get needed lod
+					if (lodMesh.hasMesh) { //If a mesh has been made...
+						previousLODIndex = lodIndex; //Update lod and mesh
 						meshFilter.mesh = lodMesh.mesh;
 					} else if (!lodMesh.hasRequestedMesh) {
-						lodMesh.RequestMesh (heightMap, meshSettings);
+						lodMesh.RequestMesh (heightMap, meshSettings); //Request a mesh
 					}
 				}
 
 
 			}
 
+            //If changed from visible to invisible, or vice versa
 			if (wasVisible != visible) {
 				
 				SetVisible (visible);
@@ -178,8 +183,9 @@ class LODMesh {
 
 		updateCallback ();
 	}
-
+ 
 	public void RequestMesh(HeightMap heightMap, MeshSettings meshSettings) {
+        //Request mesh be made, generate terrain mesh, then go to OnMeshData, which calls UpdateTerrainChunk/CollisionMesh
 		hasRequestedMesh = true;
         if (Application.isEditor && !Application.isPlaying) {
             OnMeshDataReceived(MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, lod));

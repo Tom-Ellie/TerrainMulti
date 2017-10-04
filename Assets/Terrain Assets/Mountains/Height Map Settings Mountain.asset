@@ -14,13 +14,13 @@ MonoBehaviour:
   autoUpdate: 1
   noiseSettings:
     normalizeMode: 1
-    noiseType: 3
+    noiseType: 1
     scale: 1080.68
     octaves: 6
     persistance: 0.494
     lacunarity: 2
     seed: 1
-    offset: {x: 500, y: 0}
+    offset: {x: 1201.9, y: 0}
   useFalloff: 0
   heightMultiplier: 486.98
   heightCurve:

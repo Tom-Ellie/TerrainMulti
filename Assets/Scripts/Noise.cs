@@ -60,9 +60,6 @@ public static class Noise {
                                                 Mathf.PerlinNoise(p.x + 4.0f * q.x + 8.3f, p.y + 4.0f * q.y + 2.8f) * 2 - 1);
                         value = (Mathf.PerlinNoise(sampleX + (4.0f * r.x), sampleY + (4.0f * r.y))) * 2 - 1;
 
-                    } else if (settings.noiseType == NoiseType.Simplex) {
-                        sample += NoiseHash.SimplexValue2D(pos3D, frequency);
-                        value = sample.value;
                     }
 
                     noiseHeight += value * amplitude;
