@@ -31,7 +31,7 @@ public class CoastMaker {
         System.Random random = new System.Random();
         if (agent.tokens >= limit) {
             Agent[] c1 = new Agent[] { new Agent(), new Agent() };
-            Agent c2 = new Agent();
+//            Agent c2 = new Agent();
             foreach (Agent a in c1) {
                 int randomNumber = random.Next(0, 4);
                 a.seedPos = GetNewPosInDir(agent.seedPos, (Direction)randomNumber);

@@ -37,7 +37,7 @@ public class MergeTiles : MonoBehaviour {
                 int sampleCentreX = x * (region.meshSettings.numVertsPerLine-3);
                 int sampleCentreY = y * (region.meshSettings.numVertsPerLine-3); //Why -3 here????
                 Vector2 centre = new Vector2(sampleCentreX, sampleCentreY);
-                heightMaps[x, y] = HeightMapGenerator.GenerateHeightMap((int)(region.meshSettings.numVertsPerLine), (int)(region.meshSettings.numVertsPerLine), region.heightMapSettings, centre);
+                heightMaps[x, y] = HeightMapGenerator.GenerateHeightMap((int)(region.meshSettings.numVertsPerLine), region.heightMapSettings, centre);
                 DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMaps[x, y].values, region.meshSettings, 0), x, y);
 
             }

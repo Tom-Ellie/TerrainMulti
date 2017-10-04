@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading;
+using System.Diagnostics;
 
 public class ThreadedDataRequester : MonoBehaviour {
 
@@ -22,7 +23,7 @@ public class ThreadedDataRequester : MonoBehaviour {
 
 	void DataThread(Func<object> generateData, Action<object> callback) {
 		object data = generateData ();
-		lock (dataQueue) {
+        lock (dataQueue) {
 			dataQueue.Enqueue (new ThreadInfo (callback, data)); //Once the thread is finished generating, put on queue
 		}
 	}
@@ -30,10 +31,13 @@ public class ThreadedDataRequester : MonoBehaviour {
 
 	void Update() {
 		if (dataQueue.Count > 0) {
-			for (int i = 0; i < dataQueue.Count; i++) {
-				ThreadInfo threadInfo = dataQueue.Dequeue (); //Remove threads that have finished from queue
-				threadInfo.callback (threadInfo.parameter); //Return to the calling function
-			}
+            for (int i = 0; i < dataQueue.Count; i++) {
+                ThreadInfo threadInfo;
+                lock (dataQueue) {
+                    threadInfo = dataQueue.Dequeue(); //Remove threads that have finished from queue
+                    threadInfo.callback(threadInfo.parameter); //Return to the calling function
+                }
+            }
 		}
 	}
 

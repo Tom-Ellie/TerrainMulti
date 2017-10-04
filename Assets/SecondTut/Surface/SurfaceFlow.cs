@@ -14,9 +14,9 @@ public class SurfaceFlow : MonoBehaviour {
 		if (system == null) {
 			system = GetComponent<ParticleSystem>();
 		}
-	//	if (particles == null || particles.Length < system.maxParticles) {
-	//		particles = new ParticleSystem.Particle[system.maxParticles];
-	//	}
+		if (particles == null || particles.Length < system.main.maxParticles) {
+			particles = new ParticleSystem.Particle[system.main.maxParticles];
+		}
 		int particleCount = system.GetParticles(particles);
 		PositionParticles();
 		system.SetParticles(particles, particleCount);
@@ -36,7 +36,7 @@ public class SurfaceFlow : MonoBehaviour {
 			sample.derivative = qInv * sample.derivative;
 			Vector3 curl = new Vector3(sample.derivative.y, 0f, -sample.derivative.x);
 			position += curl * Time.deltaTime * flowStrength;
-	//		position.y = sample.value + system.startSize;
+			position.y = sample.value + system.startSize;
 			particles[i].position = position;
 			if (position.x < -0.5f || position.x > 0.5f || position.z < -0.5f || position.z > 0.5f) {
 				particles[i].remainingLifetime = 0f;

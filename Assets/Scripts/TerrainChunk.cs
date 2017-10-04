@@ -2,7 +2,7 @@
 
 public class TerrainChunk {
 	
-	const float colliderGenerationDistanceThreshold = 5;
+	const float colliderGenerationDistanceThreshold = 10;
 	public event System.Action<TerrainChunk, bool> onVisibilityChanged;
 	public Vector2 coord;
 	 
@@ -70,9 +70,9 @@ public class TerrainChunk {
     public void Load() {
         //Pass function to generate height map, along with a callback, to multi-threading
         if (Application.isEditor && !Application.isPlaying) {
-            OnHeightMapReceived(HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre));
+            OnHeightMapReceived(HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, heightMapSettings, sampleCentre));
         } else {
-            ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
+            ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine,  heightMapSettings, sampleCentre), OnHeightMapReceived);
         }
     }
 
@@ -138,7 +138,7 @@ public class TerrainChunk {
 
 	public void UpdateCollisionMesh() {
 		if (!hasSetCollider) {
-			float sqrDstFromViewerToEdge = bounds.SqrDistance (viewerPosition);
+			float sqrDstFromViewerToEdge = bounds.SqrDistance (new Vector3(viewerPosition.x, viewerPosition.y, bounds.center.z));
 
 			if (sqrDstFromViewerToEdge < detailLevels [colliderLODIndex].sqrVisibleDstThreshold) {
 				if (!lodMeshes [colliderLODIndex].hasRequestedMesh) {

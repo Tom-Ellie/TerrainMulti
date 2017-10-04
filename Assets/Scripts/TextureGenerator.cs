@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public static class TextureGenerator {
 
@@ -27,4 +28,19 @@ public static class TextureGenerator {
 		return TextureFromColourMap (colourMap, width, height);
 	}
 
+    public static Texture2D MakeTextureOfColour(int size, Color colour) {
+        Color[] colourMap = new Color[size * size];
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                colourMap[y * size + x] = colour;
+            }
+
+        }
+
+        return TextureFromColourMap(colourMap, size, size);
+    }
+
+    internal static Texture MakeTextureOfColour(object v, Color green) {
+        throw new NotImplementedException();
+    }
 }

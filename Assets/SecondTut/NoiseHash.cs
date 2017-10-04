@@ -6,7 +6,8 @@ public enum NoiseMethodType {
 	Value,
 	Perlin,
 	SimplexValue,
-	Simplex
+	Simplex,
+    SecondLevelWarp
 }
 
 public static class NoiseHash {
@@ -727,4 +728,10 @@ public static class NoiseHash {
 		}
 		return sum * (1f / range);
 	}
+
+
+    public static NoiseSample MethodNoOctaves(NoiseMethod method, Vector3 point, float frequency, float amplitude, float persistence) {
+        NoiseSample sum = method(point, frequency) * amplitude;
+        return sum;
+    }
 }
