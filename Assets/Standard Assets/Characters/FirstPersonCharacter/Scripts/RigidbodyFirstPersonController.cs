@@ -245,23 +245,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
 
         /// sphere cast down just beyond the bottom of the capsule to see if the capsule is colliding round the bottom
-        private void GroundCheck()
-        {
+        private void GroundCheck() {
             m_PreviouslyGrounded = m_IsGrounded;
             RaycastHit hitInfo;
-            if (Physics.SphereCast(transform.position, m_Capsule.radius * (1.0f - advancedSettings.shellOffset), Vector3.down, out hitInfo,
-                                   ((m_Capsule.height/2f) - m_Capsule.radius) + advancedSettings.groundCheckDistance, ~0, QueryTriggerInteraction.Ignore))
-            {
-                m_IsGrounded = true;
-                m_GroundContactNormal = hitInfo.normal;
-            }
-            else
-            {
+            //           if (Physics.SphereCast(transform.position, m_Capsule.radius * (1.0f - advancedSettings.shellOffset), Vector3.down, out hitInfo,
+            //                                   ((m_Capsule.height/2f) - m_Capsule.radius) + advancedSettings.groundCheckDistance, ~0, QueryTriggerInteraction.Ignore)) {
+            if (Physics.Raycast(transform.position, Vector3.down, out hitInfo) && (hitInfo.distance < ((m_Capsule.height / 2f)) + advancedSettings.groundCheckDistance)) {
+                    m_IsGrounded = true;
+                    m_GroundContactNormal = hitInfo.normal;
+            } else {
                 m_IsGrounded = false;
                 m_GroundContactNormal = Vector3.up;
             }
-            if (!m_PreviouslyGrounded && m_IsGrounded && m_Jumping)
-            {
+
+            if (!m_PreviouslyGrounded && m_IsGrounded && m_Jumping) {
+                Debug.Log("RIP");
                 m_Jumping = false;
             }
         }

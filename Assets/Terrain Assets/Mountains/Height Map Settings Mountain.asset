@@ -16,14 +16,14 @@ MonoBehaviour:
     normalizeMode: 1
     dimensions: 2
     type: 1
-    scale: 1000
+    scale: 2.91
     octaves: 6
     persistence: 0.497
     lacunarity: 2
-    seed: 0
+    seed: 26
     offset: {x: 164.48, y: 0}
   useFalloff: 0
-  heightMultiplier: 1500
+  heightMultiplier: 1
   heightCurve:
     serializedVersion: 2
     m_Curve:
