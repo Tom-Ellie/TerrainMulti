@@ -4,7 +4,7 @@ using System.Collections;
 [CreateAssetMenu()]
 public class HeightMapSettings2 : UpdatableData {
 
-    public NoiseSettings noiseSettings;
+    public NoiseSettings2 noiseSettings;
 
     public bool useFalloff;
 

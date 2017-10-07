@@ -33,34 +33,37 @@ public class TerrainChunk2 {
         sampleCentre = coord * meshSettings.width; //Effectively same as coord * (numVertsPerLine - 3)
         Vector2 position = coord * meshSettings.meshSize; //position is coord ((0,1) etc) * tileSize. so if tile is 400, scale is 2, and coord is (1,2), pos is (800, 1600)
         bounds = new Bounds(position, Vector2.one * meshSettings.meshSize); //Bounds contains centre of position, and size of worldSize (if as above, 800)
-
-        terrain = new GameObject("Terrain");
+ //       terrain = new GameObject("Terrain");
 
         maxViewDst = meshSettings.maxViewDistance; //CHANGE TO CONSTANT DIST SPECIFIABLE IN MESH DATA
 
+       // Load();
     }
 
     //Get height map then update terrain
     public void Load() {
        // if (Application.isEditor && !Application.isPlaying) {
-            OnHeightMapReceived(GenerateTerrainData.GenerateTerrain(heightMapSettings, meshSettings.width, meshSettings.depth, sampleCentre));
+       //     OnHeightMapReceived(GenerateTerrainData.GenerateTerrain(heightMapSettings, meshSettings, sampleCentre));
       //  } else {
-       //     ThreadedDataRequester.RequestData(() => GenerateTerrainData.GenerateTerrain(heightMap, meshSettings.width, meshSettings.depth), OnHeightMapReceived);
+            ThreadedDataRequester.RequestData(() => GenerateTerrainData.GenerateTerrain(heightMapSettings, meshSettings, sampleCentre), OnHeightMapReceived);
        // }
     }
 
 
     //Called once load is sucessful for this chunk
-    void OnHeightMapReceived(object terrainData) {
-        Vector2 position = coord * meshSettings.meshSize; //position is coord ((0,1) etc) * tileSize. so if tile is 400, scale is 2, and coord is (1,2), pos is (800, 1600)
-        this.terrainData =  (TerrainData)terrainData;
-        terrainDataRecieved = true;
-        terrain = Terrain.CreateTerrainGameObject(this.terrainData);
+    void OnHeightMapReceived(object noiseData) {
+        TerrainData terrainData = GenerateTerrainData.GenerateTerrainDataStuff(meshSettings, (float[,])noiseData);
 
+
+        Vector2 position = coord * meshSettings.meshSize; //position is coord ((0,1) etc) * tileSize. so if tile is 400, scale is 2, and coord is (1,2), pos is (800, 1600)
+        //this.terrainData =  (TerrainData)terrainData;
+        terrainDataRecieved = true;
+        terrain = Terrain.CreateTerrainGameObject(terrainData);
         terrain.transform.position = new Vector3(position.x, 0, position.y); //Set actual position to real position
         terrain.transform.parent = parent; //Set parent
-
-        SetVisible(true);
+        terrain.name = coord.x + "," + coord.y;
+        Terrain terraintmp = terrain.GetComponent<Terrain>();
+        terraintmp.Flush();
     }
 
     Vector2 viewerPosition {

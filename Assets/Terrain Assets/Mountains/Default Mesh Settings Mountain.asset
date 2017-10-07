@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Name: Default Mesh Settings Mountain
   m_EditorClassIdentifier: 
   autoUpdate: 1
+  maxViewDistance: 500
   meshScale: 1
   useFlatShading: 0
-  chunkSizeIndex: 0
+  chunkSizeIndex: 4
   flatshadedChunkSizeIndex: 0

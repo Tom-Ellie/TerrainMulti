@@ -9,8 +9,12 @@ public class MeshSettings2 : UpdatableData {
 
     public float maxViewDistance = 500f;
 
-    public int width = 257;
+    public int width = 256;
     public int depth = 40;
+    public int resolution = 1029;
+
+    public Texture2D flatTexture;
+    public Texture2D steepTexture;
 
     public float meshScale = 2.5f;
     public bool useFlatShading;

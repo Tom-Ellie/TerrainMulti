@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Name: Mesh2Mount
   m_EditorClassIdentifier: 
   autoUpdate: 0
-  maxViewDistance: 500
-  width: 257
+  maxViewDistance: 2000
+  width: 256
   depth: 40
+  resolution: 257
+  flatTexture: {fileID: 2800000, guid: e36d15b65ccd248c19a846616a6767f9, type: 3}
+  steepTexture: {fileID: 2800000, guid: 22da49d227e55449d9ab0dbc09fe7f46, type: 3}
   meshScale: 1
   useFlatShading: 0
   chunkSizeIndex: 0

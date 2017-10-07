@@ -9,8 +9,9 @@ public class TerrainTileGenerator : MonoBehaviour {
     // Use this for initialization
 
     void Start() {
-        Terrain terrain = GetComponent < Terrain>();
-        terrain.terrainData = GenerateTerrainData.GenerateTerrain(region.heightMapSettings, region.meshSettings.width, region.meshSettings.depth, Vector2.zero);
+        Terrain terrain = GetComponent <Terrain>();
+        float[,] heights = GenerateTerrainData.GenerateTerrain(region.heightMapSettings, region.meshSettings, Vector2.zero);
+        terrain.terrainData = GenerateTerrainData.GenerateTerrainDataStuff(region.meshSettings, heights);
 
         //  AssignSplatMap.SetSplatMap(terrain);
     }

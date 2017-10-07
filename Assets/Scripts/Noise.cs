@@ -7,7 +7,7 @@ public static class Noise {
  //   private static float squaresToTriangles = (3f - Mathf.Sqrt(3f)) / 6f;
 //    private static float trianglesToSquares = (Mathf.Sqrt(3f) - 1f) / 2f;
 
-//    public enum NormalizeMode { Local, Global };
+    public enum NormalizeMode { Local, Global };
 
     public static float[,] GenerateNoiseMap(int mapSize, NoiseSettings settings, Vector2 sampleCentre) {
         float[,] noiseMap = new float[mapSize, mapSize];
@@ -85,20 +85,20 @@ public static class Noise {
                     minLocalNoiseHeight = noiseHeight;
                 }
                 noiseMap[x, y] = noiseHeight;
-  //              if (settings.normalizeMode == NormalizeMode.Global) {
+                if (settings.normalizeMode == NormalizeMode.Global) {
                     float normalizedHeight = (noiseMap[x, y] + 1) / (maxPossibleHeight / 0.9f);
                     noiseMap[x, y] = Mathf.Clamp(normalizedHeight, 0, int.MaxValue);
- //               }
+                }
             }
         }
 
-  //      if (settings.normalizeMode == NormalizeMode.Local) {
+        if (settings.normalizeMode == NormalizeMode.Local) {
             for (int y = 0; y < mapSize; y++) {
                 for (int x = 0; x < mapSize; x++) {
                     noiseMap[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
                 }
             }
-  //      }
+        }
         return noiseMap;
     }
 
@@ -107,7 +107,7 @@ public static class Noise {
 
 }
 
-/*
+
 [System.Serializable]
 public class NoiseSettings {
 	public Noise.NormalizeMode normalizeMode;
@@ -134,4 +134,3 @@ public class NoiseSettings {
 		persistence = Mathf.Clamp01 (persistence);
 	}
 }
-*/
